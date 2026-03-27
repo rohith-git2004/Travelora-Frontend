@@ -44,10 +44,10 @@ function Users() {
     "transition-all duration-300 hover:bg-white/75 hover:border-white/80 hover:ring-1 hover:ring-sky-200 hover:shadow-md"
 
   const inputClass =
-    "w-full bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm placeholder:text-gray-500 text-gray-800"
+    "w-full min-w-0 bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm placeholder:text-gray-500 text-gray-800"
 
   const filterButtonClass =
-    "w-full bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm text-gray-800 flex items-center justify-between"
+    "w-full min-w-0 bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm text-gray-800 flex items-center justify-between"
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -164,11 +164,11 @@ function Users() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-blue-50">
-      <section className="relative min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-b from-sky-50 via-white to-blue-50">
+      <section className="relative min-h-screen w-full overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+          <div className="min-w-0">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 break-words">
               Manage{" "}
               <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
                 Accounts
@@ -207,14 +207,14 @@ function Users() {
             />
           </div>
 
-          <div className={`mt-8 sm:mt-10 p-4 sm:p-5 ${glassCard}`}>
+          <div className={`mt-8 sm:mt-10 p-4 sm:p-5 min-w-0 ${glassCard}`}>
             <div>
               <h2 className="text-gray-900 font-semibold text-lg">
                 Account Directory
               </h2>
             </div>
 
-            <div className="mt-5 flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:gap-4">
+            <div className="mt-5 flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:gap-4 min-w-0">
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -222,13 +222,13 @@ function Users() {
                 className={inputClass}
               />
 
-              <div className="relative" ref={filterRef}>
+              <div className="relative min-w-0" ref={filterRef}>
                 <button
                   onClick={() => setShowFilter(!showFilter)}
                   className={filterButtonClass}
                 >
                   <span>{getFilterLabel()}</span>
-                  <span className="text-sm">{showFilter ? "▲" : "▼"}</span>
+                  <span className="text-sm shrink-0">{showFilter ? "▲" : "▼"}</span>
                 </button>
 
                 {showFilter && (
@@ -285,8 +285,8 @@ function Users() {
               </div>
             </div>
 
-            <div className="mt-5 overflow-x-auto rounded-2xl">
-              <table className="w-full min-w-[760px]">
+            <div className="mt-5 w-full overflow-x-auto rounded-2xl">
+              <table className="w-full min-w-[720px]">
                 <thead>
                   <tr className="text-left text-sm text-gray-600 border-b border-white/70">
                     <th className="py-3 pr-4">Name</th>
@@ -303,10 +303,14 @@ function Users() {
                       key={item._id}
                       className="border-b border-white/50 text-sm text-gray-800"
                     >
-                      <td className="py-3 pr-4 font-medium">{item.name}</td>
-                      <td className="py-3 pr-4">{item.email}</td>
+                      <td className="py-3 pr-4 font-medium break-words">
+                        {item.name}
+                      </td>
+                      <td className="py-3 pr-4 break-words">{item.email}</td>
                       <td className="py-3 pr-4 capitalize">{item.role}</td>
-                      <td className="py-3 pr-4">{item.companyName || "-"}</td>
+                      <td className="py-3 pr-4 break-words">
+                        {item.companyName || "-"}
+                      </td>
                       <td className="py-3 pr-4">{item.phone || "-"}</td>
                       <td className="py-3 pr-4">
                         <div className="flex items-center gap-2 flex-wrap min-w-[180px]">
@@ -315,7 +319,7 @@ function Users() {
                               setSelectedUser(item)
                               setShowModal(true)
                             }}
-                            className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition"
+                            className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition whitespace-nowrap"
                           >
                             View Details
                           </button>
@@ -323,7 +327,7 @@ function Users() {
                           {item.role !== "admin" && (
                             <button
                               onClick={() => openDeleteModal(item)}
-                              className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition"
+                              className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition whitespace-nowrap"
                             >
                               Remove
                             </button>
@@ -346,6 +350,10 @@ function Users() {
                 </tbody>
               </table>
             </div>
+
+            <p className="mt-3 text-xs text-gray-500 sm:hidden">
+              Swipe sideways to view the full table.
+            </p>
           </div>
         </div>
       </section>
@@ -413,8 +421,8 @@ function Users() {
 
 function StatCard({ label, value, glassCard, glassHover }) {
   return (
-    <div className={`p-4 ${glassCard} ${glassHover}`}>
-      <div className="text-xs text-gray-700">{label}</div>
+    <div className={`p-4 min-w-0 ${glassCard} ${glassHover}`}>
+      <div className="text-xs text-gray-700 break-words">{label}</div>
       <div className="mt-1 text-2xl font-bold text-gray-900">{value}</div>
     </div>
   )
@@ -422,7 +430,7 @@ function StatCard({ label, value, glassCard, glassHover }) {
 
 function DetailItem({ label, value }) {
   return (
-    <div>
+    <div className="min-w-0">
       <div className="text-xs text-gray-500">{label}</div>
       <div className="mt-1 text-gray-900 font-medium break-words">{value}</div>
     </div>

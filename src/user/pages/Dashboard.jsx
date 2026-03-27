@@ -183,18 +183,16 @@ function Dashboard() {
     "transition-all duration-300 hover:bg-white/75 hover:border-white/80 hover:ring-1 hover:ring-sky-200 hover:shadow-md hover:-translate-y-[2px]"
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-blue-50">
-      <section className="relative min-h-screen">
-
-        <div className="max-w-7xl mx-auto px-6 py-14">
-
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/70 border border-white/60 px-3 py-1 text-xs text-gray-700 backdrop-blur">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
-              Account Active
+    <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-b from-sky-50 via-white to-blue-50">
+      <section className="relative min-h-screen w-full overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-14">
+          <div className="min-w-0">
+            <div className="inline-flex max-w-full items-center gap-2 rounded-full bg-white/70 border border-white/60 px-3 py-1 text-xs text-gray-700 backdrop-blur">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+              <span className="truncate">Account Active</span>
             </div>
 
-            <h1 className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900">
+            <h1 className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900 break-words">
               Welcome,{" "}
               <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
                 {user?.name || "Traveler"}
@@ -205,11 +203,11 @@ function Dashboard() {
               Your Travelora dashboard helps you manage bookings, explore packages, and keep your profile up to date.
             </p>
 
-            {/* USER MINI PROFILE */}
-            <div className={`mt-6 flex items-center justify-between max-w-2xl p-4 ${glassCard}`}>
-              {/* LEFT SIDE */}
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/70 bg-white/60 flex items-center justify-center">
+            <div
+              className={`mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 max-w-2xl p-4 min-w-0 ${glassCard}`}
+            >
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/70 bg-white/60 flex items-center justify-center shrink-0">
                   {profileSrc ? (
                     <img
                       src={profileSrc}
@@ -223,33 +221,29 @@ function Dashboard() {
 
                 <div className="min-w-0">
                   <div className="text-gray-900 font-semibold truncate">
-                    {user?.name || "Administrator"}
+                    {user?.name || "Traveler"}
                   </div>
 
                   <div className="text-sm text-gray-700 truncate">
-                    {user?.email || "admin@travelora.com"}
+                    {user?.email || "user@travelora.com"}
                   </div>
 
-                  <div className="text-xs text-gray-600 mt-t">
+                  <div className="text-xs text-gray-600 mt-1">
                     Customer Account
                   </div>
                 </div>
               </div>
 
-              {/* RIGHT SIDE BUTTON */}
               <button
                 onClick={() => navigate("/user/profile")}
-                className="px-4 py-2 rounded-xl bg-blue-100 border border-white/70 text-gray-800 text-sm font-medium hover:bg-blue-50 transition"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-blue-100 border border-white/70 text-gray-800 text-sm font-medium hover:bg-blue-50 transition shrink-0"
               >
                 Edit
               </button>
-
             </div>
           </div>
 
-          {/* QUICK ACTIONS */}
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl">
-
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-4xl">
             <ActionCard
               title="My Bookings"
               subtitle="Manage bookings"
@@ -278,51 +272,90 @@ function Dashboard() {
             />
           </div>
 
-          {/* BOOKING SUMMARY */}
           <div className="mt-10 max-w-4xl">
             <h2 className="text-gray-900 font-semibold text-lg">
               Booking summary
             </h2>
 
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <StatCard label="Total" value={stats.total} glassCard={glassCard} glassHover={glassHover}/>
-              <StatCard label="Confirmed" value={stats.confirmed} glassCard={glassCard} glassHover={glassHover}/>
-              <StatCard label="Completed" value={stats.completed} glassCard={glassCard} glassHover={glassHover}/>
-              <StatCard label="Cancelled" value={stats.cancelled} glassCard={glassCard} glassHover={glassHover}/>
+            <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard
+                label="Total"
+                value={stats.total}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
+              <StatCard
+                label="Confirmed"
+                value={stats.confirmed}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
+              <StatCard
+                label="Completed"
+                value={stats.completed}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
+              <StatCard
+                label="Cancelled"
+                value={stats.cancelled}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
             </div>
           </div>
 
-          {/* SPEND ANALYSIS */}
           <div className="mt-10 max-w-4xl">
             <h2 className="text-gray-900 font-semibold text-lg">
               Spend analysis
             </h2>
 
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <MoneyCard label="Total Spent" value={formatINR(spend.totalSpent)} glassCard={glassCard} glassHover={glassHover}/>
-              <MoneyCard label="Paid" value={formatINR(spend.paid)} glassCard={glassCard} glassHover={glassHover}/>
-              <MoneyCard label="Refunded" value={formatINR(spend.refunded)} glassCard={glassCard} glassHover={glassHover}/>
-              <MoneyCard label="Net Paid" value={formatINR(spend.pending)} glassCard={glassCard} glassHover={glassHover}/>
+            <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <MoneyCard
+                label="Total Spent"
+                value={formatINR(spend.totalSpent)}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
+              <MoneyCard
+                label="Paid"
+                value={formatINR(spend.paid)}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
+              <MoneyCard
+                label="Refunded"
+                value={formatINR(spend.refunded)}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
+              <MoneyCard
+                label="Net Paid"
+                value={formatINR(spend.pending)}
+                glassCard={glassCard}
+                glassHover={glassHover}
+              />
             </div>
           </div>
-
         </div>
       </section>
     </div>
   )
 }
 
-/* Quick Action Card */
 function ActionCard({ title, subtitle, onClick, icon, glassCard, glassHover }) {
   return (
-    <button onClick={onClick} className={`text-left p-5 ${glassCard} ${glassHover}`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="font-semibold text-gray-900">{title}</div>
-          <div className="text-xs text-gray-700 mt-1">{subtitle}</div>
+    <button
+      onClick={onClick}
+      className={`text-left p-5 min-w-0 ${glassCard} ${glassHover}`}
+    >
+      <div className="flex items-start justify-between gap-3 min-w-0">
+        <div className="min-w-0">
+          <div className="font-semibold text-gray-900 break-words">{title}</div>
+          <div className="text-xs text-gray-700 mt-1 break-words">{subtitle}</div>
         </div>
 
-        <div className="w-10 h-10 rounded-xl bg-white/70 border border-white/70 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-white/70 border border-white/70 flex items-center justify-center shrink-0">
           {icon}
         </div>
       </div>
@@ -330,23 +363,22 @@ function ActionCard({ title, subtitle, onClick, icon, glassCard, glassHover }) {
   )
 }
 
-/* Stats Cards */
 function StatCard({ label, value, glassCard, glassHover }) {
   return (
-    <div className={`p-4 ${glassCard} ${glassHover}`}>
-      <div className="text-xs text-gray-700">{label}</div>
+    <div className={`p-4 min-w-0 ${glassCard} ${glassHover}`}>
+      <div className="text-xs text-gray-700 break-words">{label}</div>
       <div className="mt-1 text-2xl font-bold text-gray-900">{value}</div>
-      <div className="text-xs text-gray-600 mt-1">From your bookings</div>
+      <div className="text-xs text-gray-600 mt-1 break-words">From your bookings</div>
     </div>
   )
 }
 
 function MoneyCard({ label, value, glassCard, glassHover }) {
   return (
-    <div className={`p-4 ${glassCard} ${glassHover}`}>
-      <div className="text-xs text-gray-700">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-gray-900">{value}</div>
-      <div className="text-xs text-gray-600 mt-1">Auto calculated</div>
+    <div className={`p-4 min-w-0 ${glassCard} ${glassHover}`}>
+      <div className="text-xs text-gray-700 break-words">{label}</div>
+      <div className="mt-1 text-2xl font-bold text-gray-900 break-words">{value}</div>
+      <div className="text-xs text-gray-600 mt-1 break-words">Auto calculated</div>
     </div>
   )
 }
@@ -366,7 +398,7 @@ function round2(n) {
 function IconTicket() {
   return (
     <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="8" width="16" height="8" stroke="currentColor" strokeWidth="1.8"/>
+      <rect x="4" y="8" width="16" height="8" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   )
 }
@@ -374,7 +406,11 @@ function IconTicket() {
 function IconReceipt() {
   return (
     <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
-      <path d="M6 3h12v18l-2-1-2 1-2-1-2 1-2-1-2 1V3z" stroke="currentColor" strokeWidth="1.8"/>
+      <path
+        d="M6 3h12v18l-2-1-2 1-2-1-2 1-2-1-2 1V3z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
     </svg>
   )
 }
@@ -382,7 +418,11 @@ function IconReceipt() {
 function IconHeart() {
   return (
     <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
-      <path d="M12 21s-7-4.5-9-9c-1.4-3 1-6 4.2-6 1.6 0 3 1 3.8 2.2C11.8 7 13.2 6 14.8 6c3.2 0 5.6 3 4.2 6-2 4.5-9 9-9 9z" stroke="currentColor" strokeWidth="1.8"/>
+      <path
+        d="M12 21s-7-4.5-9-9c-1.4-3 1-6 4.2-6 1.6 0 3 1 3.8 2.2C11.8 7 13.2 6 14.8 6c3.2 0 5.6 3 4.2 6-2 4.5-9 9-9 9z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
     </svg>
   )
 }
