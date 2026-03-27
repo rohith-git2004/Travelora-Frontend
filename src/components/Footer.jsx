@@ -2,9 +2,11 @@ function Footer() {
   return (
     <footer
       id="contact"
-      className="bg-gradient-to-b from-blue-50 via-white to-sky-50 border-t border-gray-200"
+      className="bg-white border-t border-gray-200 shadow-md"
     >
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        {/* Brand */}
         <div>
           <div className="flex items-center gap-2 mb-4">
             <span className="text-3xl">✈️</span>
@@ -12,6 +14,7 @@ function Footer() {
               Travelora
             </h2>
           </div>
+
           <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
             Discover curated destinations, trusted travel packages, and smooth
             booking experiences with Travelora. Travel better, smarter, and with
@@ -19,8 +22,12 @@ function Footer() {
           </p>
         </div>
 
+        {/* Links */}
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Quick Links</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">
+            Quick Links
+          </h3>
+
           <ul className="space-y-3 text-sm">
             <li>
               <a href="/" className="text-gray-600 hover:text-blue-500 transition">
@@ -28,51 +35,47 @@ function Footer() {
               </a>
             </li>
             <li>
-              <a
-                href="#featured-packages"
-                className="text-gray-600 hover:text-blue-500 transition"
-              >
+              <a href="#featured-packages" className="text-gray-600 hover:text-blue-500 transition">
                 Packages
               </a>
             </li>
             <li>
-              <a
-                href="/login"
-                className="text-gray-600 hover:text-blue-500 transition"
-              >
+              <a href="/login" className="text-gray-600 hover:text-blue-500 transition">
                 Login
               </a>
             </li>
             <li>
-              <a
-                href="/register"
-                className="text-gray-600 hover:text-blue-500 transition"
-              >
+              <a href="/register" className="text-gray-600 hover:text-blue-500 transition">
                 Register
               </a>
             </li>
           </ul>
         </div>
 
+        {/* Contact */}
         <div>
-          <h3 className="text-lg font-semibold mb-4 text-gray-800">Contact</h3>
+          <h3 className="text-lg font-semibold mb-4 text-gray-800">
+            Contact
+          </h3>
+
           <ul className="space-y-3 text-gray-600 text-sm">
             <li className="flex items-center gap-3">
-              <span>📧</span>
+              <span className="text-blue-500">📧</span>
               <span>support@travelora.com</span>
             </li>
             <li className="flex items-center gap-3">
-              <span>📞</span>
+              <span className="text-blue-500">📞</span>
               <span>+91 98765 43210</span>
             </li>
             <li className="flex items-center gap-3">
-              <span>📍</span>
+              <span className="text-blue-500">📍</span>
               <span>Kerala, India</span>
             </li>
           </ul>
         </div>
       </div>
 
+      {/* Bottom */}
       <div className="text-center text-gray-500 text-sm border-t border-gray-200 py-4">
         <p>© {new Date().getFullYear()} Travelora. All rights reserved.</p>
       </div>

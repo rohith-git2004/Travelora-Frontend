@@ -130,7 +130,8 @@ function MyPackages() {
       } else if (statusFilter === "rejected") {
         matchesStatus = pkg?.status === "rejected"
       } else if (statusFilter === "updatedPackage") {
-        matchesStatus = pkg?.isUpdated === true
+        matchesStatus =
+          pkg?.status === "editedPending" || pkg?.isUpdated === true
       }
 
       return matchesSearch && matchesStatus
@@ -231,7 +232,7 @@ function MyPackages() {
             </button>
 
             {showFilter && (
-              <div className="absolute right-0 mt-2 w-full min-w-[210px] bg-white/30 backdrop-blur-xl border border-white/40 rounded-2xl shadow-xl overflow-hidden z-20">
+              <div className="absolute right-0 mt-2 w-full min-w-[210px] bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden z-20">
                 {filterOptions.map((option) => (
                   <button
                     key={option.value}
@@ -240,9 +241,9 @@ function MyPackages() {
                       setStatusFilter(option.value)
                       setShowFilter(false)
                     }}
-                    className={`w-full px-4 py-3 text-left text-black transition hover:bg-blue-200 ${
+                    className={`w-full px-4 py-3 text-left text-gray-700 transition hover:bg-blue-100 hover:text-blue-600 ${
                       statusFilter === option.value
-                        ? "bg-blue-50 font-medium"
+                        ? "bg-blue-50 font-medium text-blue-600"
                         : ""
                     }`}
                   >

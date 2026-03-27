@@ -75,9 +75,10 @@ function AgentDashboard() {
 
   const pendingPackages = useMemo(
     () =>
-      packages.filter(
-        (pkg) => String(pkg?.status || "").toLowerCase() === "pending"
-      ).length,
+      packages.filter((pkg) => {
+        const status = String(pkg?.status || "").toLowerCase()
+        return status === "pending" || status === "editedpending"
+      }).length,
     [packages]
   )
 
@@ -90,17 +91,6 @@ function AgentDashboard() {
   )
 
   const totalBookings = bookings.length
-
-  const upcomingBookings = useMemo(() => {
-    return bookings.filter((booking) => {
-      const status = String(booking?.status || "").toLowerCase()
-      const rawDate = booking?.travelDate || null
-      if (!rawDate || status === "cancelled") return false
-      const d = new Date(rawDate)
-      if (Number.isNaN(d.getTime())) return false
-      return d.getTime() >= Date.now()
-    }).length
-  }, [bookings])
 
   const completedBookings = useMemo(() => {
     return bookings.filter((booking) => {
@@ -124,7 +114,7 @@ function AgentDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-blue-50">
       <section className="relative min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
           <div>
             <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div>
@@ -141,9 +131,11 @@ function AgentDashboard() {
               </div>
             </div>
 
-            <div className={`mt-6 flex items-center justify-between max-w-3xl p-4 ${glassCard}`}>
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/70 bg-white/60 flex items-center justify-center">
+            <div
+              className={`mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 max-w-3xl p-4 ${glassCard}`}
+            >
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-14 h-14 rounded-2xl overflow-hidden border border-white/70 bg-white/60 flex items-center justify-center shrink-0">
                   {profileSrc ? (
                     <img
                       src={profileSrc}
@@ -172,28 +164,19 @@ function AgentDashboard() {
 
               <button
                 onClick={() => navigate("/agent/profile")}
-                className="px-4 py-2 rounded-xl bg-blue-100 border border-white/70 text-gray-800 text-sm font-medium hover:bg-blue-50 transition"
+                className="px-4 py-2 rounded-xl bg-blue-100 border border-white/70 text-gray-800 text-sm font-medium hover:bg-blue-50 transition w-full sm:w-auto"
               >
                 Edit
               </button>
             </div>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-5xl">
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl">
             <ActionCard
               title="My Packages"
               subtitle="Manage Packages"
               onClick={() => navigate("/agent/packages")}
               icon={<IconPackage />}
-              glassCard={glassCard}
-              glassHover={glassHover}
-            />
-
-            <ActionCard
-              title="Upcoming Trips"
-              subtitle="View upcoming bookings"
-              onClick={() => navigate("/agent/history")}
-              icon={<IconUpcoming />}
               glassCard={glassCard}
               glassHover={glassHover}
             />
@@ -240,16 +223,10 @@ function AgentDashboard() {
               />
             </div>
 
-            <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
               <StatCard
                 label="Total Bookings"
                 value={loading ? "..." : totalBookings}
-                glassCard={glassCard}
-                glassHover={glassHover}
-              />
-              <StatCard
-                label="Upcoming"
-                value={loading ? "..." : upcomingBookings}
                 glassCard={glassCard}
                 glassHover={glassHover}
               />
@@ -275,8 +252,11 @@ function AgentDashboard() {
 
 function ActionCard({ title, subtitle, onClick, icon, glassCard, glassHover }) {
   return (
-    <button onClick={onClick} className={`text-left p-5 ${glassCard} ${glassHover}`}>
-      <div className="flex items-start justify-between">
+    <button
+      onClick={onClick}
+      className={`text-left p-5 ${glassCard} ${glassHover}`}
+    >
+      <div className="flex items-start justify-between gap-3">
         <div>
           <div className="font-semibold text-gray-900">{title}</div>
           {subtitle && (
@@ -284,7 +264,7 @@ function ActionCard({ title, subtitle, onClick, icon, glassCard, glassHover }) {
           )}
         </div>
 
-        <div className="w-10 h-10 rounded-xl bg-white/70 border border-white/70 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-white/70 border border-white/70 flex items-center justify-center shrink-0">
           {icon}
         </div>
       </div>
@@ -301,34 +281,6 @@ function StatCard({ label, value, glassCard, glassHover }) {
   )
 }
 
-function IconCreate() {
-  return (
-    <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
-      <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  )
-}
-
-function IconEdit() {
-  return (
-    <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M4 20h4l10-10-4-4L4 16v4z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M13 6l4 4"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
-
 function IconPackage() {
   return (
     <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
@@ -337,20 +289,6 @@ function IconPackage() {
         stroke="currentColor"
         strokeWidth="1.8"
       />
-    </svg>
-  )
-}
-
-function IconUpcoming() {
-  return (
-    <svg className="w-5 h-5 text-gray-900" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M7 3v4M17 3v4M3 10h18M5 7h14a2 2 0 0 1 2 2v10H3V9a2 2 0 0 1 2-2z"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <circle cx="12" cy="15" r="2" fill="currentColor" />
     </svg>
   )
 }
