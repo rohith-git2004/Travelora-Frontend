@@ -59,7 +59,8 @@ function Users() {
         item?.name?.toLowerCase().includes(q) ||
         item?.email?.toLowerCase().includes(q) ||
         item?.phone?.toLowerCase().includes(q) ||
-        item?.companyName?.toLowerCase().includes(q)
+        item?.nationality?.toLowerCase().includes(q) ||
+        item?.state?.toLowerCase().includes(q)
 
       return matchRole && matchSearch
     })
@@ -96,6 +97,12 @@ function Users() {
       default:
         return "bg-emerald-100 text-emerald-700 border border-emerald-200"
     }
+  }
+
+  const formatBooleanValue = (value) => {
+    if (value === true) return "Yes"
+    if (value === false) return "No"
+    return "-"
   }
 
   const fetchUsers = async () => {
@@ -228,7 +235,7 @@ function Users() {
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search name, email, phone, company..."
+                placeholder="Search name, email, phone, nationality, state..."
                 className={inputClass}
               />
 
@@ -293,15 +300,13 @@ function Users() {
               </div>
             ) : (
               <>
-                {/* Desktop Table */}
                 <div className="hidden lg:block mt-6 overflow-x-auto">
-                  <table className="w-full min-w-[900px]">
+                  <table className="w-full min-w-[760px]">
                     <thead>
                       <tr className="text-left text-sm text-gray-600 border-b border-white/70">
                         <th className="py-3 pr-4">Name</th>
                         <th className="py-3 pr-4">Email</th>
                         <th className="py-3 pr-4">Role</th>
-                        <th className="py-3 pr-4">Company</th>
                         <th className="py-3 pr-4">Phone</th>
                         <th className="py-3 pr-4">Actions</th>
                       </tr>
@@ -322,9 +327,6 @@ function Users() {
                             >
                               {item.role}
                             </span>
-                          </td>
-                          <td className="py-4 pr-4">
-                            {item.companyName || "-"}
                           </td>
                           <td className="py-4 pr-4">{item.phone || "-"}</td>
                           <td className="py-4 pr-4">
@@ -355,7 +357,7 @@ function Users() {
                       {filteredUsers.length === 0 && (
                         <tr>
                           <td
-                            colSpan="6"
+                            colSpan="5"
                             className="py-8 text-center text-gray-600 text-sm"
                           >
                             No accounts found
@@ -366,7 +368,6 @@ function Users() {
                   </table>
                 </div>
 
-                {/* Mobile + Tablet Cards */}
                 <div className="lg:hidden mt-6 space-y-4">
                   {filteredUsers.length > 0 ? (
                     filteredUsers.map((item) => (
@@ -375,7 +376,7 @@ function Users() {
                         className="rounded-2xl border border-white/70 bg-white/80 backdrop-blur-md p-4 shadow-sm"
                       >
                         <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0">
+                          <div className="min-w-0 flex-1">
                             <h3 className="text-base font-semibold text-gray-900 break-words">
                               {item.name}
                             </h3>
@@ -393,11 +394,7 @@ function Users() {
                           </span>
                         </div>
 
-                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                          <InfoBox
-                            label="Company"
-                            value={item.companyName || "-"}
-                          />
+                        <div className="mt-4 grid grid-cols-1 gap-3 text-sm">
                           <InfoBox label="Phone" value={item.phone || "-"} />
                         </div>
 
@@ -444,25 +441,17 @@ function Users() {
           }}
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            <DetailItem label="Name" value={selectedUser.name} />
-            <DetailItem label="Email" value={selectedUser.email} />
+            <DetailItem label="Name" value={selectedUser.name || "-"} />
+            <DetailItem label="Email" value={selectedUser.email || "-"} />
             <DetailItem
               label="Role"
               value={
-                <span
-                  className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold capitalize ${getRoleBadge(
-                    selectedUser.role
-                  )}`}
-                >
-                  {selectedUser.role}
+                <span className="capitalize text-gray-900">
+                  {selectedUser.role || "-"}
                 </span>
               }
             />
             <DetailItem label="Phone" value={selectedUser.phone || "-"} />
-            <DetailItem
-              label="Company"
-              value={selectedUser.companyName || "-"}
-            />
             <DetailItem label="Address" value={selectedUser.address || "-"} />
             <DetailItem label="Age" value={selectedUser.age ?? "-"} />
             <DetailItem label="Gender" value={selectedUser.gender || "-"} />
@@ -479,6 +468,39 @@ function Users() {
               label="Emergency Contact"
               value={selectedUser.emergencyContact || "-"}
             />
+            <DetailItem
+              label="Has Passport"
+              value={formatBooleanValue(selectedUser.hasPassport)}
+            />
+            <DetailItem
+              label="Has Driving License"
+              value={formatBooleanValue(selectedUser.hasDrivingLicense)}
+            />
+
+            {selectedUser.role === "agent" && (
+              <DetailItem
+                label="Company Name"
+                value={selectedUser.companyName || "-"}
+              />
+            )}
+
+            <DetailItem
+              label="Created At"
+              value={
+                selectedUser.createdAt
+                  ? new Date(selectedUser.createdAt).toLocaleString()
+                  : "-"
+              }
+            />
+            <DetailItem
+              label="Updated At"
+              value={
+                selectedUser.updatedAt
+                  ? new Date(selectedUser.updatedAt).toLocaleString()
+                  : "-"
+              }
+            />
+            <DetailItem label="User ID" value={selectedUser._id || "-"} />
           </div>
         </DetailsModal>
       )}
@@ -552,7 +574,7 @@ function DetailItem({ label, value }) {
 function DetailsModal({ title, onClose, children }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/70 bg-white backdrop-blur-xl shadow-2xl">
+      <div className="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/70 bg-white backdrop-blur-xl shadow-2xl">
         <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
             {title}
