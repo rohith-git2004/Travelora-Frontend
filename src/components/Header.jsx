@@ -119,49 +119,58 @@ function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 w-full overflow-x-hidden">
       {role && (
-        <div className="bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-500 text-white py-2 overflow-hidden">
-          <div className="animate-scroll-slow flex gap-8 whitespace-nowrap">
-            {[...featuredOffers, ...featuredOffers].map((offer, index) => (
-              <div key={index} className="inline-flex items-center gap-2 px-4">
-                <span className="text-yellow-200">★</span>
-                <span className="font-semibold">{offer.title}</span>
-                <span className="bg-white text-blue-600 px-2 py-1 rounded-full text-xs font-bold">
-                  {offer.discount}
-                </span>
-              </div>
-            ))}
+        <div className="w-full overflow-hidden bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-500 text-white">
+          <div className="w-full whitespace-nowrap">
+            <div className="animate-scroll-slow inline-flex min-w-max items-center gap-6 py-2">
+              {[...featuredOffers, ...featuredOffers, ...featuredOffers].map((offer, index) => (
+                <div
+                  key={index}
+                  className="inline-flex items-center gap-2 px-2 sm:px-4"
+                >
+                  <span className="text-yellow-200 shrink-0">★</span>
+                  <span className="font-semibold text-sm sm:text-base">
+                    {offer.title}
+                  </span>
+                  <span className="bg-white text-blue-600 px-2 py-1 rounded-full text-[10px] sm:text-xs font-bold shrink-0">
+                    {offer.discount}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
       <div
-        className={`transition-all duration-300 ${
+        className={`w-full transition-all duration-300 ${
           isScrolled
-            ? "bg-white/75 backdrop-blur-xl border-b border-white/40 shadow-sm"
-            : "bg-white/40 backdrop-blur-md border-b border-white/20"
+            ? "bg-white/85 backdrop-blur-xl border-b border-white/40 shadow-sm"
+            : "bg-white/70 backdrop-blur-md border-b border-white/20"
         }`}
       >
         <div
-          className={`max-w-7xl mx-auto px-4 sm:px-6 transition-all duration-300 ${
+          className={`max-w-7xl mx-auto px-3 sm:px-6 transition-all duration-300 ${
             isScrolled ? "py-3" : "py-4"
           }`}
         >
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl sm:text-3xl font-bold">
+          <div className="flex items-center justify-between gap-3 min-w-0">
+            <div className="min-w-0">
               <Link
                 to={role ? `/${role}/dashboard` : "/"}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 min-w-0"
               >
-                <span className="drop-shadow-sm">✈️</span>
-                <span className="bg-gradient-to-r from-blue-500 to-sky-500 bg-clip-text text-transparent">
+                <span className="drop-shadow-sm shrink-0 text-xl sm:text-2xl">
+                  ✈️
+                </span>
+                <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-500 to-sky-500 bg-clip-text text-transparent truncate">
                   Travelora
                 </span>
               </Link>
-            </h1>
+            </div>
 
-            <nav className="flex items-center gap-3">
+            <nav className="flex items-center gap-2 sm:gap-3 shrink-0">
               {role ? (
                 <>
                   <div className="hidden sm:flex items-center gap-2">
@@ -169,7 +178,7 @@ function Header() {
                       <Link
                         key={link.to}
                         to={link.to}
-                        className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition"
+                        className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition whitespace-nowrap"
                       >
                         {link.label}
                       </Link>
@@ -180,12 +189,13 @@ function Header() {
                     <button
                       onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                       className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/60 border border-white/40 text-gray-700"
+                      type="button"
                     >
                       {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
                     </button>
 
                     {isMobileMenuOpen && (
-                      <div className="absolute right-0 top-12 w-56 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-xl overflow-hidden">
+                      <div className="absolute right-0 top-12 w-52 max-w-[85vw] rounded-2xl bg-white border border-gray-200 shadow-xl overflow-hidden">
                         {filteredNavLinks.map((link) => (
                           <Link
                             key={link.to}
@@ -206,6 +216,7 @@ function Header() {
                         <button
                           onClick={handleLogout}
                           className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition"
+                          type="button"
                         >
                           Logout
                         </button>
@@ -216,7 +227,8 @@ function Header() {
                   <div className="relative dropdown-container flex items-center">
                     <button
                       onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      className="relative w-10 h-10 rounded-full border border-white/40 shadow-sm"
+                      className="relative w-10 h-10 rounded-full border border-white/40 shadow-sm shrink-0"
+                      type="button"
                     >
                       <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-r from-blue-500 to-sky-500 text-white">
                         {profileSrc ? (
@@ -234,7 +246,7 @@ function Header() {
                     </button>
 
                     {isDropdownOpen && (
-                      <div className="absolute right-0 top-12 w-52 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/50 shadow-xl overflow-hidden">
+                      <div className="absolute right-0 top-12 w-52 max-w-[85vw] rounded-2xl bg-white border border-gray-200 shadow-xl overflow-hidden">
                         <div className="px-4 py-3 border-b border-gray-100">
                           <div className="text-sm font-medium text-gray-800 truncate">
                             {effectiveUser?.name || "User"}
@@ -255,6 +267,7 @@ function Header() {
                         <button
                           onClick={handleLogout}
                           className="w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition"
+                          type="button"
                         >
                           Logout
                         </button>
@@ -270,7 +283,7 @@ function Header() {
                         <a
                           key={link.to}
                           href={link.to}
-                          className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition"
+                          className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition whitespace-nowrap"
                         >
                           {link.label}
                         </a>
@@ -278,7 +291,7 @@ function Header() {
                         <Link
                           key={link.to}
                           to={link.to}
-                          className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition"
+                          className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition whitespace-nowrap"
                         >
                           {link.label}
                         </Link>
@@ -289,13 +302,13 @@ function Header() {
                   <div className="flex items-center gap-2">
                     <Link
                       to="/login"
-                      className="px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition"
+                      className="px-3 sm:px-4 py-2 rounded-xl text-gray-700 hover:bg-white/60 transition text-sm sm:text-base"
                     >
                       Login
                     </Link>
                     <Link
                       to="/register"
-                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-medium hover:brightness-110 transition shadow-sm"
+                      className="px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-medium hover:brightness-110 transition shadow-sm text-sm sm:text-base"
                     >
                       Register
                     </Link>
@@ -310,11 +323,11 @@ function Header() {
       <style>{`
         @keyframes scroll-slow {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.333%); }
         }
 
         .animate-scroll-slow {
-          animation: scroll-slow 30s linear infinite;
+          animation: scroll-slow 28s linear infinite;
         }
       `}</style>
     </header>
