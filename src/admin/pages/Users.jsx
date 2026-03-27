@@ -180,7 +180,7 @@ function Users() {
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
               label="Total Accounts"
               value={counts.total}
@@ -226,6 +226,7 @@ function Users() {
                 <button
                   onClick={() => setShowFilter(!showFilter)}
                   className={filterButtonClass}
+                  type="button"
                 >
                   <span>{getFilterLabel()}</span>
                   <span className="text-sm shrink-0">{showFilter ? "▲" : "▼"}</span>
@@ -239,8 +240,11 @@ function Users() {
                         setShowFilter(false)
                       }}
                       className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "all" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                        roleFilter === "all"
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : ""
                       }`}
+                      type="button"
                     >
                       All Roles
                     </button>
@@ -251,8 +255,11 @@ function Users() {
                         setShowFilter(false)
                       }}
                       className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "user" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                        roleFilter === "user"
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : ""
                       }`}
+                      type="button"
                     >
                       Users
                     </button>
@@ -263,8 +270,11 @@ function Users() {
                         setShowFilter(false)
                       }}
                       className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "agent" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                        roleFilter === "agent"
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : ""
                       }`}
+                      type="button"
                     >
                       Agents
                     </button>
@@ -275,8 +285,11 @@ function Users() {
                         setShowFilter(false)
                       }}
                       className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "admin" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                        roleFilter === "admin"
+                          ? "bg-blue-50 text-blue-600 font-medium"
+                          : ""
                       }`}
+                      type="button"
                     >
                       Admins
                     </button>
@@ -285,75 +298,85 @@ function Users() {
               </div>
             </div>
 
-            <div className="mt-5 w-full overflow-x-auto rounded-2xl">
-              <table className="w-full min-w-[720px]">
-                <thead>
-                  <tr className="text-left text-sm text-gray-600 border-b border-white/70">
-                    <th className="py-3 pr-4">Name</th>
-                    <th className="py-3 pr-4">Email</th>
-                    <th className="py-3 pr-4">Role</th>
-                    <th className="py-3 pr-4">Company</th>
-                    <th className="py-3 pr-4">Phone</th>
-                    <th className="py-3 pr-4">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.map((item) => (
-                    <tr
-                      key={item._id}
-                      className="border-b border-white/50 text-sm text-gray-800"
-                    >
-                      <td className="py-3 pr-4 font-medium break-words">
-                        {item.name}
-                      </td>
-                      <td className="py-3 pr-4 break-words">{item.email}</td>
-                      <td className="py-3 pr-4 capitalize">{item.role}</td>
-                      <td className="py-3 pr-4 break-words">
-                        {item.companyName || "-"}
-                      </td>
-                      <td className="py-3 pr-4">{item.phone || "-"}</td>
-                      <td className="py-3 pr-4">
-                        <div className="flex items-center gap-2 flex-wrap min-w-[180px]">
-                          <button
-                            onClick={() => {
-                              setSelectedUser(item)
-                              setShowModal(true)
-                            }}
-                            className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition whitespace-nowrap"
-                          >
-                            View Details
-                          </button>
-
-                          {item.role !== "admin" && (
-                            <button
-                              onClick={() => openDeleteModal(item)}
-                              className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition whitespace-nowrap"
-                            >
-                              Remove
-                            </button>
-                          )}
-                        </div>
-                      </td>
+            <div className="mt-5 -mx-1 sm:mx-0">
+              <div className="overflow-x-auto rounded-2xl">
+                <table className="w-full min-w-[760px]">
+                  <thead>
+                    <tr className="text-left text-sm text-gray-600 border-b border-white/70">
+                      <th className="py-3 px-3 sm:pr-4">Name</th>
+                      <th className="py-3 px-3 sm:pr-4">Email</th>
+                      <th className="py-3 px-3 sm:pr-4">Role</th>
+                      <th className="py-3 px-3 sm:pr-4">Company</th>
+                      <th className="py-3 px-3 sm:pr-4">Phone</th>
+                      <th className="py-3 px-3 sm:pr-4">Actions</th>
                     </tr>
-                  ))}
-
-                  {!loading && filteredUsers.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan="6"
-                        className="py-8 text-center text-gray-600 text-sm"
+                  </thead>
+                  <tbody>
+                    {filteredUsers.map((item) => (
+                      <tr
+                        key={item._id}
+                        className="border-b border-white/50 text-sm text-gray-800"
                       >
-                        No accounts found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                        <td className="py-3 px-3 sm:pr-4 font-medium break-words">
+                          {item.name}
+                        </td>
+                        <td className="py-3 px-3 sm:pr-4 break-words">
+                          {item.email}
+                        </td>
+                        <td className="py-3 px-3 sm:pr-4 capitalize">
+                          {item.role}
+                        </td>
+                        <td className="py-3 px-3 sm:pr-4 break-words">
+                          {item.companyName || "-"}
+                        </td>
+                        <td className="py-3 px-3 sm:pr-4 whitespace-nowrap">
+                          {item.phone || "-"}
+                        </td>
+                        <td className="py-3 px-3 sm:pr-4">
+                          <div className="flex items-center gap-2 flex-wrap min-w-[180px]">
+                            <button
+                              onClick={() => {
+                                setSelectedUser(item)
+                                setShowModal(true)
+                              }}
+                              className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition whitespace-nowrap"
+                              type="button"
+                            >
+                              View Details
+                            </button>
 
-            <p className="mt-3 text-xs text-gray-500 sm:hidden">
-              Swipe sideways to view the full table.
-            </p>
+                            {item.role !== "admin" && (
+                              <button
+                                onClick={() => openDeleteModal(item)}
+                                className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition whitespace-nowrap"
+                                type="button"
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {!loading && filteredUsers.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan="6"
+                          className="py-8 text-center text-gray-600 text-sm"
+                        >
+                          No accounts found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="mt-3 text-xs text-gray-500 sm:hidden">
+                Swipe sideways to view the full table.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -447,7 +470,8 @@ function DetailsModal({ title, onClose, children }) {
           </h3>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
+            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition shrink-0"
+            type="button"
           >
             ✕
           </button>
