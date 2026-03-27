@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { getAllPackagesAPI } from "../../services/userAPI"
 import { AuthContext } from "../../context/AuthContext"
+import serverURL from "../../services/serverURL"
 
 function Packages() {
   const [packages, setPackages] = useState([])
@@ -260,7 +261,7 @@ function Packages() {
 
                 {pkg.image && (
                   <img
-                    src={`http://localhost:5000/uploads/${pkg.image}`}
+                    src={`${serverURL}/uploads/${pkg.image}`}
                     alt={pkg.title}
                     className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500"
                   />
