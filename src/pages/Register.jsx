@@ -63,15 +63,27 @@ function Register() {
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden px-4 py-10">
       {/* SUCCESS CENTER MODAL */}
       {successMsg && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-3xl bg-white shadow-2xl border border-white/60 px-8 py-10 text-center animate-[fadeIn_.3s_ease]">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-              <span className="text-3xl text-green-600">✓</span>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div
+            className="
+              w-full max-w-xs sm:max-w-sm
+              rounded-2xl sm:rounded-3xl
+              bg-white shadow-2xl border border-white/60
+              px-5 py-6 sm:px-8 sm:py-10
+              text-center animate-[fadeIn_.3s_ease]
+            "
+          >
+            <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-green-100 flex items-center justify-center">
+              <span className="text-2xl sm:text-3xl text-green-600">✓</span>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+
+            <h2 className="text-lg sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
               Success
             </h2>
-            <p className="text-gray-600 text-sm font-medium">{successMsg}</p>
+
+            <p className="text-gray-600 text-xs sm:text-sm font-medium leading-relaxed">
+              {successMsg}
+            </p>
           </div>
         </div>
       )}
