@@ -13,7 +13,7 @@ import Packages from "./user/pages/Packages"
 import MyBookings from "./user/pages/MyBookings"
 import BookingHistory from "./user/pages/BookingHistory"
 import Profile from "./user/pages/Profile"
-import WhishList from "./user/pages/Whishlist"
+import WhishList from "./user/pages/WhishList"
 import PackageDetails from "./user/pages/PackageDetails"
 import UserDashboard from "./user/pages/Dashboard"
 
