@@ -4,7 +4,6 @@ import {
   deleteUserAdminAPI,
   getAllUsersAdminAPI,
 } from "../../services/userAPI"
-import serverURL from "../../services/serverURL"
 
 function Users() {
   const { user } = useContext(AuthContext)
@@ -44,10 +43,10 @@ function Users() {
     "transition-all duration-300 hover:bg-white/75 hover:border-white/80 hover:ring-1 hover:ring-sky-200 hover:shadow-md"
 
   const inputClass =
-    "w-full min-w-0 bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm placeholder:text-gray-500 text-gray-800"
+    "w-full bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm placeholder:text-gray-500 text-gray-800"
 
   const filterButtonClass =
-    "w-full min-w-0 bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm text-gray-800 flex items-center justify-between"
+    "w-full bg-white/50 backdrop-blur-md border border-white/50 rounded-2xl px-4 py-3 outline-none shadow-sm text-gray-800 flex items-center justify-between"
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -84,7 +83,18 @@ function Users() {
       case "admin":
         return "Admins"
       default:
-        return "All Roles"
+        return "All roles"
+    }
+  }
+
+  const getRoleBadge = (role) => {
+    switch (role) {
+      case "admin":
+        return "bg-purple-100 text-purple-700 border border-purple-200"
+      case "agent":
+        return "bg-sky-100 text-sky-700 border border-sky-200"
+      default:
+        return "bg-emerald-100 text-emerald-700 border border-emerald-200"
     }
   }
 
@@ -164,18 +174,18 @@ function Users() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-b from-sky-50 via-white to-blue-50">
-      <section className="relative min-h-screen w-full overflow-x-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          <div className="min-w-0">
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 break-words">
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-blue-50">
+      <section className="relative min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
               Manage{" "}
               <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
                 Accounts
               </span>
             </h1>
 
-            <p className="mt-2 text-gray-700 max-w-3xl">
+            <p className="mt-2 text-sm sm:text-base text-gray-700 max-w-3xl">
               Search, filter, view details, and manage account access.
             </p>
           </div>
@@ -207,14 +217,14 @@ function Users() {
             />
           </div>
 
-          <div className={`mt-8 sm:mt-10 p-4 sm:p-5 min-w-0 ${glassCard}`}>
+          <div className={`mt-8 sm:mt-10 p-4 sm:p-5 ${glassCard}`}>
             <div>
               <h2 className="text-gray-900 font-semibold text-lg">
                 Account Directory
               </h2>
             </div>
 
-            <div className="mt-5 flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:gap-4 min-w-0">
+            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -222,31 +232,25 @@ function Users() {
                 className={inputClass}
               />
 
-              <div className="relative min-w-0" ref={filterRef}>
+              <div className="relative" ref={filterRef}>
                 <button
                   onClick={() => setShowFilter(!showFilter)}
                   className={filterButtonClass}
-                  type="button"
                 >
                   <span>{getFilterLabel()}</span>
-                  <span className="text-sm shrink-0">{showFilter ? "▲" : "▼"}</span>
+                  <span className="text-sm">{showFilter ? "▲" : "▼"}</span>
                 </button>
 
                 {showFilter && (
-                  <div className="absolute right-0 mt-2 w-full sm:min-w-[190px] bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden z-20">
+                  <div className="absolute left-0 md:left-auto md:right-0 top-full mt-2 w-full md:min-w-[190px] bg-white/95 backdrop-blur-xl border border-blue-100 rounded-2xl shadow-xl overflow-hidden z-20">
                     <button
                       onClick={() => {
                         setRoleFilter("all")
                         setShowFilter(false)
                       }}
-                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "all"
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : ""
-                      }`}
-                      type="button"
+                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
                     >
-                      All Roles
+                      All roles
                     </button>
 
                     <button
@@ -254,12 +258,7 @@ function Users() {
                         setRoleFilter("user")
                         setShowFilter(false)
                       }}
-                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "user"
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : ""
-                      }`}
-                      type="button"
+                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
                     >
                       Users
                     </button>
@@ -269,12 +268,7 @@ function Users() {
                         setRoleFilter("agent")
                         setShowFilter(false)
                       }}
-                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "agent"
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : ""
-                      }`}
-                      type="button"
+                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
                     >
                       Agents
                     </button>
@@ -284,12 +278,7 @@ function Users() {
                         setRoleFilter("admin")
                         setShowFilter(false)
                       }}
-                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
-                        roleFilter === "admin"
-                          ? "bg-blue-50 text-blue-600 font-medium"
-                          : ""
-                      }`}
-                      type="button"
+                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
                     >
                       Admins
                     </button>
@@ -298,85 +287,150 @@ function Users() {
               </div>
             </div>
 
-            <div className="mt-5 -mx-1 sm:mx-0">
-              <div className="overflow-x-auto rounded-2xl">
-                <table className="w-full min-w-[760px]">
-                  <thead>
-                    <tr className="text-left text-sm text-gray-600 border-b border-white/70">
-                      <th className="py-3 px-3 sm:pr-4">Name</th>
-                      <th className="py-3 px-3 sm:pr-4">Email</th>
-                      <th className="py-3 px-3 sm:pr-4">Role</th>
-                      <th className="py-3 px-3 sm:pr-4">Company</th>
-                      <th className="py-3 px-3 sm:pr-4">Phone</th>
-                      <th className="py-3 px-3 sm:pr-4">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredUsers.map((item) => (
-                      <tr
-                        key={item._id}
-                        className="border-b border-white/50 text-sm text-gray-800"
-                      >
-                        <td className="py-3 px-3 sm:pr-4 font-medium break-words">
-                          {item.name}
-                        </td>
-                        <td className="py-3 px-3 sm:pr-4 break-words">
-                          {item.email}
-                        </td>
-                        <td className="py-3 px-3 sm:pr-4 capitalize">
-                          {item.role}
-                        </td>
-                        <td className="py-3 px-3 sm:pr-4 break-words">
-                          {item.companyName || "-"}
-                        </td>
-                        <td className="py-3 px-3 sm:pr-4 whitespace-nowrap">
-                          {item.phone || "-"}
-                        </td>
-                        <td className="py-3 px-3 sm:pr-4">
-                          <div className="flex items-center gap-2 flex-wrap min-w-[180px]">
-                            <button
-                              onClick={() => {
-                                setSelectedUser(item)
-                                setShowModal(true)
-                              }}
-                              className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition whitespace-nowrap"
-                              type="button"
-                            >
-                              View Details
-                            </button>
-
-                            {item.role !== "admin" && (
-                              <button
-                                onClick={() => openDeleteModal(item)}
-                                className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition whitespace-nowrap"
-                                type="button"
-                              >
-                                Remove
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-
-                    {!loading && filteredUsers.length === 0 && (
-                      <tr>
-                        <td
-                          colSpan="6"
-                          className="py-8 text-center text-gray-600 text-sm"
-                        >
-                          No accounts found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+            {loading ? (
+              <div className="py-12 text-center text-gray-600 text-sm">
+                Loading accounts...
               </div>
+            ) : (
+              <>
+                {/* Desktop Table */}
+                <div className="hidden lg:block mt-6 overflow-x-auto">
+                  <table className="w-full min-w-[900px]">
+                    <thead>
+                      <tr className="text-left text-sm text-gray-600 border-b border-white/70">
+                        <th className="py-3 pr-4">Name</th>
+                        <th className="py-3 pr-4">Email</th>
+                        <th className="py-3 pr-4">Role</th>
+                        <th className="py-3 pr-4">Company</th>
+                        <th className="py-3 pr-4">Phone</th>
+                        <th className="py-3 pr-4">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.map((item) => (
+                        <tr
+                          key={item._id}
+                          className="border-b border-white/50 text-sm text-gray-800"
+                        >
+                          <td className="py-4 pr-4 font-medium">{item.name}</td>
+                          <td className="py-4 pr-4 break-all">{item.email}</td>
+                          <td className="py-4 pr-4">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${getRoleBadge(
+                                item.role
+                              )}`}
+                            >
+                              {item.role}
+                            </span>
+                          </td>
+                          <td className="py-4 pr-4">
+                            {item.companyName || "-"}
+                          </td>
+                          <td className="py-4 pr-4">{item.phone || "-"}</td>
+                          <td className="py-4 pr-4">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <button
+                                onClick={() => {
+                                  setSelectedUser(item)
+                                  setShowModal(true)
+                                }}
+                                className="px-3 py-2 rounded-xl bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition"
+                              >
+                                View Details
+                              </button>
 
-              <p className="mt-3 text-xs text-gray-500 sm:hidden">
-                Swipe sideways to view the full table.
-              </p>
-            </div>
+                              {item.role !== "admin" && (
+                                <button
+                                  onClick={() => openDeleteModal(item)}
+                                  className="px-3 py-2 rounded-xl bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition"
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+
+                      {filteredUsers.length === 0 && (
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="py-8 text-center text-gray-600 text-sm"
+                          >
+                            No accounts found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile + Tablet Cards */}
+                <div className="lg:hidden mt-6 space-y-4">
+                  {filteredUsers.length > 0 ? (
+                    filteredUsers.map((item) => (
+                      <div
+                        key={item._id}
+                        className="rounded-2xl border border-white/70 bg-white/80 backdrop-blur-md p-4 shadow-sm"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <h3 className="text-base font-semibold text-gray-900 break-words">
+                              {item.name}
+                            </h3>
+                            <p className="mt-1 text-sm text-gray-600 break-all">
+                              {item.email}
+                            </p>
+                          </div>
+
+                          <span
+                            className={`shrink-0 px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold capitalize ${getRoleBadge(
+                              item.role
+                            )}`}
+                          >
+                            {item.role}
+                          </span>
+                        </div>
+
+                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                          <InfoBox
+                            label="Company"
+                            value={item.companyName || "-"}
+                          />
+                          <InfoBox label="Phone" value={item.phone || "-"} />
+                        </div>
+
+                        <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedUser(item)
+                              setShowModal(true)
+                            }}
+                            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white text-gray-800 border border-gray-200 text-sm font-medium hover:bg-gray-50 transition"
+                          >
+                            View Details
+                          </button>
+
+                          {item.role !== "admin" && (
+                            <button
+                              onClick={() => openDeleteModal(item)}
+                              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="py-8 text-center text-gray-600 text-sm">
+                      No accounts found
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -389,17 +443,37 @@ function Users() {
             setSelectedUser(null)
           }}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <DetailItem label="Name" value={selectedUser.name} />
             <DetailItem label="Email" value={selectedUser.email} />
-            <DetailItem label="Role" value={selectedUser.role} />
+            <DetailItem
+              label="Role"
+              value={
+                <span
+                  className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold capitalize ${getRoleBadge(
+                    selectedUser.role
+                  )}`}
+                >
+                  {selectedUser.role}
+                </span>
+              }
+            />
             <DetailItem label="Phone" value={selectedUser.phone || "-"} />
-            <DetailItem label="Company" value={selectedUser.companyName || "-"} />
+            <DetailItem
+              label="Company"
+              value={selectedUser.companyName || "-"}
+            />
             <DetailItem label="Address" value={selectedUser.address || "-"} />
             <DetailItem label="Age" value={selectedUser.age ?? "-"} />
             <DetailItem label="Gender" value={selectedUser.gender || "-"} />
-            <DetailItem label="Blood Group" value={selectedUser.bloodGroup || "-"} />
-            <DetailItem label="Nationality" value={selectedUser.nationality || "-"} />
+            <DetailItem
+              label="Blood Group"
+              value={selectedUser.bloodGroup || "-"}
+            />
+            <DetailItem
+              label="Nationality"
+              value={selectedUser.nationality || "-"}
+            />
             <DetailItem label="State" value={selectedUser.state || "-"} />
             <DetailItem
               label="Emergency Contact"
@@ -444,18 +518,33 @@ function Users() {
 
 function StatCard({ label, value, glassCard, glassHover }) {
   return (
-    <div className={`p-4 min-w-0 ${glassCard} ${glassHover}`}>
-      <div className="text-xs text-gray-700 break-words">{label}</div>
-      <div className="mt-1 text-2xl font-bold text-gray-900">{value}</div>
+    <div className={`p-4 ${glassCard} ${glassHover}`}>
+      <div className="text-xs sm:text-sm text-gray-700">{label}</div>
+      <div className="mt-1 text-xl sm:text-2xl font-bold text-gray-900">
+        {value}
+      </div>
+    </div>
+  )
+}
+
+function InfoBox({ label, value }) {
+  return (
+    <div className="rounded-xl bg-slate-50 border border-slate-200 px-3 py-2.5">
+      <div className="text-xs text-gray-500">{label}</div>
+      <div className="mt-1 text-sm font-medium text-gray-900 break-words">
+        {value}
+      </div>
     </div>
   )
 }
 
 function DetailItem({ label, value }) {
   return (
-    <div className="min-w-0">
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
       <div className="text-xs text-gray-500">{label}</div>
-      <div className="mt-1 text-gray-900 font-medium break-words">{value}</div>
+      <div className="mt-1 text-sm sm:text-base text-gray-900 font-medium break-words">
+        {value}
+      </div>
     </div>
   )
 }
@@ -463,21 +552,22 @@ function DetailItem({ label, value }) {
 function DetailsModal({ title, onClose, children }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-      <div className="w-full max-w-3xl max-h-[90vh] rounded-3xl border border-white/70 bg-white backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/70 bg-white backdrop-blur-xl shadow-2xl">
         <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
             {title}
           </h3>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition shrink-0"
-            type="button"
+            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
           >
             ✕
           </button>
         </div>
 
-        <div className="p-4 sm:p-6 overflow-y-auto">{children}</div>
+        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -493,7 +583,7 @@ function ConfirmModal({
   loading = false,
 }) {
   return (
-    <div className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+    <div className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white shadow-2xl">
         <div className="p-5 sm:p-6 text-center">
           <div
@@ -509,7 +599,7 @@ function ConfirmModal({
           <h3 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">
             {title}
           </h3>
-          <p className="mt-2 text-gray-600">{message}</p>
+          <p className="mt-2 text-sm sm:text-base text-gray-600">{message}</p>
 
           <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
             <button
@@ -544,7 +634,7 @@ function AlertModal({ title, message, onClose, type = "success" }) {
   const isError = type === "error"
 
   return (
-    <div className="fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+    <div className="fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white shadow-2xl">
         <div className="p-5 sm:p-6 text-center">
           <div
@@ -560,7 +650,7 @@ function AlertModal({ title, message, onClose, type = "success" }) {
           <h3 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">
             {title}
           </h3>
-          <p className="mt-2 text-gray-600">{message}</p>
+          <p className="mt-2 text-sm sm:text-base text-gray-600">{message}</p>
 
           <button
             type="button"
