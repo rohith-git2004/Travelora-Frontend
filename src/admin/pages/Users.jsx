@@ -37,17 +37,6 @@ function Users() {
     return ls ? JSON.parse(ls)?.token : null
   }, [user?.token])
 
-  const profileImage = user?.profileImage || ""
-  const profileSrc = profileImage ? `${serverURL}/uploads/${profileImage}` : ""
-
-  const initials = useMemo(() => {
-    const name = user?.name?.trim() || "Admin"
-    const parts = name.split(" ").filter(Boolean)
-    const first = parts[0]?.[0] || "A"
-    const last = parts.length > 1 ? parts[parts.length - 1][0] : ""
-    return (first + last).toUpperCase()
-  }, [user?.name])
-
   const glassCard =
     "rounded-2xl border border-white/60 bg-white/60 backdrop-blur-xl shadow-sm shadow-black/10"
 
@@ -95,7 +84,7 @@ function Users() {
       case "admin":
         return "Admins"
       default:
-        return "All roles"
+        return "All Roles"
     }
   }
 
@@ -177,12 +166,12 @@ function Users() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-blue-50">
       <section className="relative min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
           <div>
             <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
               Manage{" "}
               <span className="bg-gradient-to-r from-sky-500 via-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                Acoounts
+                Accounts
               </span>
             </h1>
 
@@ -191,7 +180,7 @@ function Users() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
               label="Total Accounts"
               value={counts.total}
@@ -218,14 +207,14 @@ function Users() {
             />
           </div>
 
-          <div className={`mt-10 p-5 ${glassCard}`}>
+          <div className={`mt-8 sm:mt-10 p-4 sm:p-5 ${glassCard}`}>
             <div>
               <h2 className="text-gray-900 font-semibold text-lg">
                 Account Directory
               </h2>
             </div>
 
-            <div className="mt-5 grid sm:grid-cols-2 gap-4">
+            <div className="mt-5 flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:gap-4">
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -243,15 +232,17 @@ function Users() {
                 </button>
 
                 {showFilter && (
-                  <div className="absolute right-0 mt-2 min-w-[190px] bg-white backdrop-blur-xl border border-blue-100 rounded-2xl shadow-xl overflow-hidden z-20">
+                  <div className="absolute right-0 mt-2 w-full sm:min-w-[190px] bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden z-20">
                     <button
                       onClick={() => {
                         setRoleFilter("all")
                         setShowFilter(false)
                       }}
-                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
+                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
+                        roleFilter === "all" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                      }`}
                     >
-                      All roles
+                      All Roles
                     </button>
 
                     <button
@@ -259,7 +250,9 @@ function Users() {
                         setRoleFilter("user")
                         setShowFilter(false)
                       }}
-                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
+                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
+                        roleFilter === "user" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                      }`}
                     >
                       Users
                     </button>
@@ -269,7 +262,9 @@ function Users() {
                         setRoleFilter("agent")
                         setShowFilter(false)
                       }}
-                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
+                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
+                        roleFilter === "agent" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                      }`}
                     >
                       Agents
                     </button>
@@ -279,7 +274,9 @@ function Users() {
                         setRoleFilter("admin")
                         setShowFilter(false)
                       }}
-                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-200 transition"
+                      className={`w-full text-left px-4 py-3 text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition ${
+                        roleFilter === "admin" ? "bg-blue-50 text-blue-600 font-medium" : ""
+                      }`}
                     >
                       Admins
                     </button>
@@ -288,7 +285,7 @@ function Users() {
               </div>
             </div>
 
-            <div className="mt-5 overflow-x-auto">
+            <div className="mt-5 overflow-x-auto rounded-2xl">
               <table className="w-full min-w-[760px]">
                 <thead>
                   <tr className="text-left text-sm text-gray-600 border-b border-white/70">
@@ -312,13 +309,13 @@ function Users() {
                       <td className="py-3 pr-4">{item.companyName || "-"}</td>
                       <td className="py-3 pr-4">{item.phone || "-"}</td>
                       <td className="py-3 pr-4">
-                        <div className="flex items-center gap-2 flex-wrap">
+                        <div className="flex items-center gap-2 flex-wrap min-w-[180px]">
                           <button
                             onClick={() => {
                               setSelectedUser(item)
                               setShowModal(true)
                             }}
-                            className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50"
+                            className="px-3 py-2 rounded-lg bg-white text-gray-800 border border-gray-200 text-xs font-medium hover:bg-gray-50 transition"
                           >
                             View Details
                           </button>
@@ -326,7 +323,7 @@ function Users() {
                           {item.role !== "admin" && (
                             <button
                               onClick={() => openDeleteModal(item)}
-                              className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600"
+                              className="px-3 py-2 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition"
                             >
                               Remove
                             </button>
@@ -361,7 +358,7 @@ function Users() {
             setSelectedUser(null)
           }}
         >
-          <div className="grid sm:grid-cols-2 gap-4 text-sm text-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
             <DetailItem label="Name" value={selectedUser.name} />
             <DetailItem label="Email" value={selectedUser.email} />
             <DetailItem label="Role" value={selectedUser.role} />
@@ -434,19 +431,21 @@ function DetailItem({ label, value }) {
 
 function DetailsModal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-3xl rounded-3xl border border-white/70 bg-white backdrop-blur-xl shadow-2xl">
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+    <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+      <div className="w-full max-w-3xl max-h-[90vh] rounded-3xl border border-white/70 bg-white backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+            {title}
+          </h3>
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700"
+            className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
           >
             ✕
           </button>
         </div>
 
-        <div className="p-6">{children}</div>
+        <div className="p-4 sm:p-6 overflow-y-auto">{children}</div>
       </div>
     </div>
   )
@@ -462,9 +461,9 @@ function ConfirmModal({
   loading = false,
 }) {
   return (
-    <div className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
       <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white shadow-2xl">
-        <div className="p-6 text-center">
+        <div className="p-5 sm:p-6 text-center">
           <div
             className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center text-2xl border ${
               danger
@@ -475,15 +474,17 @@ function ConfirmModal({
             {danger ? "!" : "i"}
           </div>
 
-          <h3 className="mt-4 text-2xl font-bold text-gray-900">{title}</h3>
+          <h3 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">
+            {title}
+          </h3>
           <p className="mt-2 text-gray-600">{message}</p>
 
-          <div className="mt-6 flex items-center gap-3">
+          <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
             <button
               type="button"
               onClick={onCancel}
               disabled={loading}
-              className="flex-1 rounded-2xl border border-gray-200 bg-white text-gray-700 font-semibold py-3 hover:bg-gray-50 transition disabled:opacity-70"
+              className="w-full flex-1 rounded-2xl border border-gray-200 bg-white text-gray-700 font-semibold py-3 hover:bg-gray-50 transition disabled:opacity-70"
             >
               Cancel
             </button>
@@ -492,7 +493,7 @@ function ConfirmModal({
               type="button"
               onClick={onConfirm}
               disabled={loading}
-              className={`flex-1 rounded-2xl text-white font-semibold py-3 transition disabled:opacity-70 ${
+              className={`w-full flex-1 rounded-2xl text-white font-semibold py-3 transition disabled:opacity-70 ${
                 danger
                   ? "bg-gradient-to-r from-red-500 to-rose-500 hover:brightness-110"
                   : "bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-110"
@@ -511,9 +512,9 @@ function AlertModal({ title, message, onClose, type = "success" }) {
   const isError = type === "error"
 
   return (
-    <div className="fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
       <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white shadow-2xl">
-        <div className="p-6 text-center">
+        <div className="p-5 sm:p-6 text-center">
           <div
             className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center text-2xl border ${
               isError
@@ -524,7 +525,9 @@ function AlertModal({ title, message, onClose, type = "success" }) {
             {isError ? "✕" : "✓"}
           </div>
 
-          <h3 className="mt-4 text-2xl font-bold text-gray-900">{title}</h3>
+          <h3 className="mt-4 text-xl sm:text-2xl font-bold text-gray-900">
+            {title}
+          </h3>
           <p className="mt-2 text-gray-600">{message}</p>
 
           <button
