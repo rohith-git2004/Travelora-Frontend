@@ -2,10 +2,13 @@ import { useState, useContext } from "react"
 import { loginAPI } from "../services/authAPI"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
+import { GoogleLogin } from "@react-oauth/google"
+import { googleLoginAPI } from "../services/authAPI"
 
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false) // ✅ added
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
 
@@ -31,8 +34,10 @@ function Login() {
 
       login(res.data, res.data.role)
 
-      if (res.data.role === "user") navigate("/user/packages", { replace: true })
-      else if (res.data.role === "agent") navigate("/agent/dashboard", { replace: true })
+      if (res.data.role === "user")
+        navigate("/user/packages", { replace: true })
+      else if (res.data.role === "agent")
+        navigate("/agent/dashboard", { replace: true })
       else navigate("/admin/dashboard", { replace: true })
     } catch {
       setErrorMsg("Server error. Please try again.")
@@ -105,27 +110,70 @@ function Login() {
             />
           </div>
 
-          {/* Password */}
+          {/* Password (UPDATED) */}
           <div>
             <label className="text-sm text-white font-medium">
               Password
             </label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="
-                mt-2 w-full px-4 py-3
-                text-sm sm:text-base
-                rounded-xl
-                bg-white/30 border border-white/40
-                text-white placeholder:text-white/70
-                outline-none backdrop-blur-xl
-                focus:ring-2 focus:ring-white/60
-              "
-            />
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="
+                  mt-2 w-full px-4 py-3 pr-10
+                  text-sm sm:text-base
+                  rounded-xl
+                  bg-white/30 border border-white/40
+                  text-white placeholder:text-white/70
+                  outline-none backdrop-blur-xl
+                  focus:ring-2 focus:ring-white/60
+                "
+              />
+
+              {/* Instagram style toggle */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/80 hover:text-white"
+              >
+                {showPassword ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 3l18 18M10.5 10.5a2 2 0 002.8 2.8M6.5 6.5C4.5 8 3 12 3 12s3.5 6 9.5 6c1.5 0 2.9-.3 4.1-.8M17.5 17.5C19.5 16 21 12 21 12s-3.5-6-9.5-6c-1.5 0-2.9.3-4.1.8"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"
+                    />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Button */}
@@ -140,6 +188,29 @@ function Login() {
           >
             {loading ? "Signing in..." : "Login"}
           </button>
+
+          <div className="mt-4 flex justify-center">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+                  const res = await googleLoginAPI(credentialResponse.credential)
+
+                  if (res.data.success) {
+                    login(res.data, res.data.role)
+
+                    if (res.data.role === "user")
+                      navigate("/user/packages", { replace: true })
+                    else if (res.data.role === "agent")
+                      navigate("/agent/dashboard", { replace: true })
+                    else navigate("/admin/dashboard", { replace: true })
+                  }
+                } catch {
+                  setErrorMsg("Google login failed")
+                }
+              }}
+              onError={() => setErrorMsg("Google login failed")}
+            />
+          </div>
 
           <p className="text-center text-xs sm:text-sm text-white/80 leading-relaxed">
             Don’t have an account?{" "}

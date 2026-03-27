@@ -46,9 +46,14 @@ function Header() {
   }, [location.pathname])
 
   const handleLogout = () => {
-    logout()
-    navigate("/", { replace: true })
-  }
+  logout()
+
+  // force clear + redirect
+  localStorage.removeItem("user")
+  localStorage.removeItem("role")
+
+  window.location.href = "/"
+}
 
   const effectiveUser = useMemo(() => {
     if (user) return user

@@ -14,3 +14,12 @@ export const loginAPI = async (userDetails) => {
     "Content-Type": "application/json",
   })
 }
+
+export const googleLoginAPI = async (token) => {
+  return await commonAPI(
+    "POST",
+    `${serverURL}/api/users/google-login`,
+    { credential: token },
+    { "Content-Type": "application/json" }
+  )
+}
