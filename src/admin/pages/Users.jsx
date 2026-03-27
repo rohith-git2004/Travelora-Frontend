@@ -180,6 +180,144 @@ function Users() {
     }
   }
 
+  const renderUserDetails = () => {
+    if (!selectedUser) return null
+
+    if (selectedUser.role === "admin") {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <DetailItem label="Name" value={selectedUser.name || "-"} />
+          <DetailItem label="Email" value={selectedUser.email || "-"} />
+          <DetailItem
+            label="Role"
+            value={
+              <span className="capitalize text-gray-900">
+                {selectedUser.role || "-"}
+              </span>
+            }
+          />
+          <DetailItem label="Phone" value={selectedUser.phone || "-"} />
+        </div>
+      )
+    }
+
+    if (selectedUser.role === "agent") {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <DetailItem label="Name" value={selectedUser.name || "-"} />
+          <DetailItem label="Email" value={selectedUser.email || "-"} />
+          <DetailItem
+            label="Role"
+            value={
+              <span className="capitalize text-gray-900">
+                {selectedUser.role || "-"}
+              </span>
+            }
+          />
+          <DetailItem label="Phone" value={selectedUser.phone || "-"} />
+          <DetailItem label="Address" value={selectedUser.address || "-"} />
+          <DetailItem label="Age" value={selectedUser.age ?? "-"} />
+          <DetailItem label="Gender" value={selectedUser.gender || "-"} />
+          <DetailItem
+            label="Blood Group"
+            value={selectedUser.bloodGroup || "-"}
+          />
+          <DetailItem
+            label="Nationality"
+            value={selectedUser.nationality || "-"}
+          />
+          <DetailItem label="State" value={selectedUser.state || "-"} />
+          <DetailItem
+            label="Has Passport"
+            value={formatBooleanValue(selectedUser.hasPassport)}
+          />
+          <DetailItem
+            label="Has Driving License"
+            value={formatBooleanValue(selectedUser.hasDrivingLicense)}
+          />
+          <DetailItem
+            label="Company Name"
+            value={selectedUser.companyName || "-"}
+          />
+          <DetailItem
+            label="Created At"
+            value={
+              selectedUser.createdAt
+                ? new Date(selectedUser.createdAt).toLocaleString()
+                : "-"
+            }
+          />
+          <DetailItem
+            label="Updated At"
+            value={
+              selectedUser.updatedAt
+                ? new Date(selectedUser.updatedAt).toLocaleString()
+                : "-"
+            }
+          />
+          <DetailItem label="User ID" value={selectedUser._id || "-"} />
+        </div>
+      )
+    }
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+        <DetailItem label="Name" value={selectedUser.name || "-"} />
+        <DetailItem label="Email" value={selectedUser.email || "-"} />
+        <DetailItem
+          label="Role"
+          value={
+            <span className="capitalize text-gray-900">
+              {selectedUser.role || "-"}
+            </span>
+          }
+        />
+        <DetailItem label="Phone" value={selectedUser.phone || "-"} />
+        <DetailItem label="Address" value={selectedUser.address || "-"} />
+        <DetailItem label="Age" value={selectedUser.age ?? "-"} />
+        <DetailItem label="Gender" value={selectedUser.gender || "-"} />
+        <DetailItem
+          label="Blood Group"
+          value={selectedUser.bloodGroup || "-"}
+        />
+        <DetailItem
+          label="Nationality"
+          value={selectedUser.nationality || "-"}
+        />
+        <DetailItem label="State" value={selectedUser.state || "-"} />
+        <DetailItem
+          label="Emergency Contact"
+          value={selectedUser.emergencyContact || "-"}
+        />
+        <DetailItem
+          label="Has Passport"
+          value={formatBooleanValue(selectedUser.hasPassport)}
+        />
+        <DetailItem
+          label="Has Driving License"
+          value={formatBooleanValue(selectedUser.hasDrivingLicense)}
+        />
+        <DetailItem
+          label="Created At"
+          value={
+            selectedUser.createdAt
+              ? new Date(selectedUser.createdAt).toLocaleString()
+              : "-"
+          }
+        />
+        <DetailItem
+          label="Updated At"
+          value={
+            selectedUser.updatedAt
+              ? new Date(selectedUser.updatedAt).toLocaleString()
+              : "-"
+          }
+        />
+        <DetailItem label="User ID" value={selectedUser._id || "-"} />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-blue-50">
       <section className="relative min-h-screen">
@@ -440,68 +578,7 @@ function Users() {
             setSelectedUser(null)
           }}
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            <DetailItem label="Name" value={selectedUser.name || "-"} />
-            <DetailItem label="Email" value={selectedUser.email || "-"} />
-            <DetailItem
-              label="Role"
-              value={
-                <span className="capitalize text-gray-900">
-                  {selectedUser.role || "-"}
-                </span>
-              }
-            />
-            <DetailItem label="Phone" value={selectedUser.phone || "-"} />
-            <DetailItem label="Address" value={selectedUser.address || "-"} />
-            <DetailItem label="Age" value={selectedUser.age ?? "-"} />
-            <DetailItem label="Gender" value={selectedUser.gender || "-"} />
-            <DetailItem
-              label="Blood Group"
-              value={selectedUser.bloodGroup || "-"}
-            />
-            <DetailItem
-              label="Nationality"
-              value={selectedUser.nationality || "-"}
-            />
-            <DetailItem label="State" value={selectedUser.state || "-"} />
-            <DetailItem
-              label="Emergency Contact"
-              value={selectedUser.emergencyContact || "-"}
-            />
-            <DetailItem
-              label="Has Passport"
-              value={formatBooleanValue(selectedUser.hasPassport)}
-            />
-            <DetailItem
-              label="Has Driving License"
-              value={formatBooleanValue(selectedUser.hasDrivingLicense)}
-            />
-
-            {selectedUser.role === "agent" && (
-              <DetailItem
-                label="Company Name"
-                value={selectedUser.companyName || "-"}
-              />
-            )}
-
-            <DetailItem
-              label="Created At"
-              value={
-                selectedUser.createdAt
-                  ? new Date(selectedUser.createdAt).toLocaleString()
-                  : "-"
-              }
-            />
-            <DetailItem
-              label="Updated At"
-              value={
-                selectedUser.updatedAt
-                  ? new Date(selectedUser.updatedAt).toLocaleString()
-                  : "-"
-              }
-            />
-            <DetailItem label="User ID" value={selectedUser._id || "-"} />
-          </div>
+          {renderUserDetails()}
         </DetailsModal>
       )}
 
