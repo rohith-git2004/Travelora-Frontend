@@ -250,99 +250,170 @@ function BookingHistory() {
         </div>
 
         {showModal && selected && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-            <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden animate-[fadeIn_.25s_ease-out]">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-sky-50">
-                <h2 className="text-2xl font-bold text-gray-800">
+          <div
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4"
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="absolute inset-0 bg-black/40" onClick={closeModal} />
+
+            <div className="relative z-10 w-full max-w-2xl max-h-[90vh] rounded-3xl bg-white border border-gray-200 shadow-2xl overflow-hidden flex flex-col">
+              <div className="p-4 sm:p-5 border-b border-gray-200 flex items-center justify-between">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
                   Booking Details
-                </h2>
+                </h3>
+
                 <button
                   onClick={closeModal}
-                  className="w-10 h-10 rounded-full bg-white border border-gray-200 text-xl text-gray-600 hover:bg-gray-50 transition"
+                  className="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition"
+                  aria-label="Close"
                 >
-                  ×
+                  ✕
                 </button>
               </div>
 
-              <div className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800">
-                    {selected.package?.title || "Package"}
-                  </h3>
-                  <p className="text-gray-500">
-                    {selected.package?.destination || "No destination"}
-                  </p>
+              <div className="p-4 sm:p-6 space-y-4 overflow-y-auto">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="w-full sm:w-32 h-44 sm:h-24 rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center">
+                    {selected.package?.image ? (
+                      <img
+                        src={`${serverURL}/uploads/${selected.package.image}`}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-3xl">🌍</div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <p className="text-lg font-bold text-gray-900 break-words">
+                      {selected.package?.title || "Package"}
+                    </p>
+
+                    <p className="text-sm text-gray-600 mt-1">
+                      Status:{" "}
+                      <span className="font-semibold text-gray-900 capitalize">
+                        {selected._displayStatus || getDisplayStatus(selected)}
+                      </span>
+                    </p>
+
+                    <p className="text-sm text-gray-600 mt-1">
+                      Destination:{" "}
+                      <span className="font-semibold text-gray-900">
+                        {selected.package?.destination || "-"}
+                      </span>
+                    </p>
+                  </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100">
-                    <p className="text-sm text-gray-500">Travel Date</p>
-                    <p className="font-semibold text-gray-800">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-2xl bg-gray-50 border border-gray-200 p-3">
+                    <p className="text-gray-600">Travel Date</p>
+                    <p className="font-semibold text-gray-900 break-words">
                       {selected.travelDate
                         ? new Date(selected.travelDate).toDateString()
                         : "-"}
                     </p>
                   </div>
 
-                  <div className="bg-sky-50 rounded-2xl p-4 border border-sky-100">
-                    <p className="text-sm text-gray-500">Status</p>
-                    <p className="font-semibold text-gray-800 capitalize">
-                      {selected._displayStatus || getDisplayStatus(selected)}
-                    </p>
-                  </div>
-
-                  <div className="bg-cyan-50 rounded-2xl p-4 border border-cyan-100">
-                    <p className="text-sm text-gray-500">Travellers</p>
-                    <p className="font-semibold text-gray-800">
+                  <div className="rounded-2xl bg-gray-50 border border-gray-200 p-3">
+                    <p className="text-gray-600">People</p>
+                    <p className="font-semibold text-gray-900">
                       {selected.numberOfPeople || 0}
                     </p>
                   </div>
 
-                  <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
-                    <p className="text-sm text-gray-500">Total Price</p>
-                    <p className="font-semibold text-gray-800">
-                      ₹{selected.totalPrice || 0}
+                  <div className="rounded-2xl bg-gray-50 border border-gray-200 p-3">
+                    <p className="text-gray-600">Days</p>
+                    <p className="font-semibold text-gray-900">
+                      {selected.package?.days || "-"}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl bg-gray-50 border border-gray-200 p-3">
+                    <p className="text-gray-600">Total Price</p>
+                    <p className="font-semibold text-gray-900 break-words">
+                      ₹{Number(selected.totalPrice || 0).toLocaleString()}
                     </p>
                   </div>
                 </div>
 
-                <div>
-                  <h4 className="text-lg font-bold text-gray-800 mb-3">
-                    Traveller Details
-                  </h4>
+                {(selected._displayStatus === "cancelled" ||
+                  selected.status === "cancelled") && (
+                  <div className="rounded-2xl bg-rose-50 border border-rose-200 p-4">
+                    <p className="font-bold text-rose-700 mb-2">Refund Information</p>
 
-                  {selected.travellers && selected.travellers.length > 0 ? (
-                    <div className="space-y-3">
-                      {selected.travellers.map((traveller, index) => (
-                        <div
-                          key={index}
-                          className="rounded-2xl border border-gray-200 bg-gray-50 p-4"
-                        >
-                          <p>
-                            <span className="font-semibold">Name:</span>{" "}
-                            {traveller.name || "-"}
-                          </p>
-                          <p>
-                            <span className="font-semibold">Age:</span>{" "}
-                            {traveller.age || "-"}
-                          </p>
-                          <p>
-                            <span className="font-semibold">Sex:</span>{" "}
-                            {traveller.sex || "-"}
-                          </p>
-                          <p>
-                            <span className="font-semibold">Blood Group:</span>{" "}
-                            {traveller.bloodGroup || "-"}
-                          </p>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between gap-3">
+                        <span className="text-gray-600">Refund eligible</span>
+                        <span className="font-semibold text-gray-900">
+                          {selected.refundPercentage ?? 0}%
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between gap-3">
+                        <span className="text-gray-600">Refund amount</span>
+                        <span className="font-bold text-gray-900">
+                          ₹{Number(selected.refundAmount || 0).toLocaleString()}
+                        </span>
+                      </div>
+
+                      {selected.daysLeft !== undefined && (
+                        <div className="flex justify-between gap-3">
+                          <span className="text-gray-600">Days remaining</span>
+                          <span className="font-semibold text-gray-900">
+                            {selected.daysLeft}
+                          </span>
                         </div>
-                      ))}
+                      )}
                     </div>
-                  ) : (
-                    <p className="text-gray-500">
-                      No traveller details available.
+                  </div>
+                )}
+
+                {Array.isArray(selected.travellers) && selected.travellers.length > 0 && (
+                  <div className="mt-2">
+                    <p className="font-semibold text-gray-900 mb-2">
+                      Travellers Details
                     </p>
-                  )}
-                </div>
+
+                    <div className="border border-gray-200 rounded-2xl overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <div className="min-w-[520px]">
+                          <div className="grid grid-cols-4 bg-gray-50 text-gray-700 text-xs font-semibold px-3 py-2">
+                            <div>Name</div>
+                            <div>Age</div>
+                            <div>Gender</div>
+                            <div>Blood Group</div>
+                          </div>
+
+                          {selected.travellers.map((t, idx) => (
+                            <div
+                              key={idx}
+                              className="grid grid-cols-4 text-sm px-3 py-2 border-t border-gray-200 bg-white"
+                            >
+                              <div className="text-gray-900">{t?.name || "-"}</div>
+                              <div className="text-gray-900">{t?.age ?? "-"}</div>
+                              <div className="text-gray-900">{t?.sex || "-"}</div>
+                              <div className="text-gray-900">
+                                {t?.bloodGroup || "-"}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 sm:p-5 border-t border-gray-200 flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="w-full sm:w-auto px-5 py-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
